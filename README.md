@@ -28,9 +28,9 @@ O modelo VO que deve ser passado via body (json) é:
 Se a IDE não tiver o ícone para rodar a aplicação, poderá rodar via terminal:
 ```sh
 mvn clean compile spring-boot:run
-
-ou simplesmente
-
+```
+ou simplesmente  
+```sh
 mvn spring-boot:run
 ```
 
@@ -96,9 +96,9 @@ mvn spring-boot:run
 1) Get com filtro (nome do produto) e paginação
 ```sh
 localhost:8080/v1/produto-servico/search?searchTerm=teclado&page=0&size=3
-
+```
 retorno esperado:
-
+```sh
 {
     "content": [
         {
@@ -157,8 +157,9 @@ retorno esperado:
 2)
 ```sh
 localhost:8080/v1/produto-servico/pagination?page=0&size=5
-
+```
 retorno esperado:
+```sh
 {
     "content": [
         {
@@ -236,9 +237,9 @@ retorno esperado:
 1) Pedido com filtro (pelo valor) e paginação:
 ```sh
 localhost:8080/v1/pedido/search?searchTerm=10&page=0&size=2
-
+```
 retorno esperado:
-
+```sh
 {
     "content": [
         {
@@ -322,8 +323,9 @@ retorno esperado:
 ```sh
 
 localhost:8080/v1/pedido/pagination?page=0&size=5
-
+```
 retorno esperado:
+```sh
 {
     "content": [
         {
