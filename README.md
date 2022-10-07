@@ -1,4 +1,4 @@
-# banckend_MS_Pedidos
+# backend_MS_Pedidos
 
 Microserviço de cadastrar Pedido/Serviço e Pedido.
 
@@ -33,6 +33,9 @@ ou simplesmente
 ```sh
 mvn spring-boot:run
 ```
+
+## Nome do banco de dados:
+Foi configurado para acessar o banco de dados Postgresl na porta padrão com o nome **backend**
 
 ### Endpoint para cadastro de produto/serviço
 
