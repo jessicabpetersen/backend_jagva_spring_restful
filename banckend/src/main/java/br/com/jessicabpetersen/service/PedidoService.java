@@ -20,6 +20,7 @@ import br.com.jessicabpetersen.model.Pedido;
 import br.com.jessicabpetersen.model.ProdutoServico;
 import br.com.jessicabpetersen.modelVO.PedidoVO;
 import br.com.jessicabpetersen.modelVO.ProdutoServicoVo;
+import br.com.jessicabpetersen.modelVO.Situacao;
 import br.com.jessicabpetersen.modelVO.Status;
 import br.com.jessicabpetersen.modelVO.Tipo;
 import br.com.jessicabpetersen.repository.ItensPedidoRepository;
@@ -65,7 +66,7 @@ public class PedidoService {
 			
 		}
 		voReturn.setProdutoServico(lista);
-		voReturn.setTotal(calculaTotalPedido(voReturn.getProdutoServico(), voReturn.getDesconto()));
+		voReturn.setTotal(calculaTotalPedido(voReturn.getProdutoServico(), voReturn.getDesconto(), pedido));
 		return voReturn;
 	}
 	
@@ -83,7 +84,7 @@ public class PedidoService {
 		vo.setId(pedido.getId());
 	}
 	
-	protected Double calculaTotalPedido(List<ProdutoServicoVo> list, Double desconto) {
+	protected Double calculaTotalPedido(List<ProdutoServicoVo> list, Double desconto, Pedido pedido) {
 		Double totalProduto = 0D;
 		Double totalServico = 0D;
 		Double total;
@@ -94,7 +95,7 @@ public class PedidoService {
 				totalServico += ps.getValor();
 			}
 		}
-		if(desconto != null && desconto != 0D) {
+		if(pedido.getSituacao() == Situacao.ABERTO && desconto != null && desconto != 0D) {
 			total = totalServico + (totalProduto - ((totalProduto * desconto)/100));
 		}else {
 			total = totalServico + totalProduto;
@@ -105,22 +106,30 @@ public class PedidoService {
 
 	@Transactional
 	public PedidoVO update(PedidoVO vo) {
-		Pedido pedido = repository.findById(vo.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this product ID"));
+		Pedido pedido = repository.findById(vo.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this order ID"));
 		verificaCamposPedidoUpdate(pedido, vo);
 		repository.save(pedido);
-		itensRepository.deleteByIdPedido(pedido);
 		PedidoVO voRetorno = new PedidoVO();
 		atualizaVo(pedido, voRetorno);
-		List<ProdutoServico> produtoServico = vo.getProdutoServico().stream().map(p -> mapper.map(p, ProdutoServico.class)).collect(Collectors.toList());
 		List<ProdutoServicoVo> lista = new ArrayList<>();
-		for(ProdutoServico ps: produtoServico) {
-			var produto = produtoRepository.findById(ps.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this product ID"));
-			verificaCamposProdutoUpdate(produto, ps);
-			saveItensPedido(pedido, produto, lista);
+		if(vo.getProdutoServico()  != null) {
+			itensRepository.deleteByIdPedido(pedido);
+			List<ProdutoServico> produtoServico = vo.getProdutoServico().stream().map(p -> mapper.map(p, ProdutoServico.class)).collect(Collectors.toList());
+						for(ProdutoServico ps: produtoServico) {
+				var produto = produtoRepository.findById(ps.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this product ID"));
+				verificaCamposProdutoUpdate(produto, ps);
+				saveItensPedido(pedido, produto, lista);
+			}
+		}else {
+			var itensEntity = itensRepository.findByIdPedido(pedido).orElseThrow(() -> new ResourceNotFoundException("No records found for this order"));	
+			List<ProdutoServicoVo> listaProdutoServico = new ArrayList();
+			for(ItensPedido itens: itensEntity){
+				ProdutoServico produto = produtoRepository.findById(itens.getIdProdutoServico().getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this order"));
+				lista.add(mapper.map(produto, ProdutoServicoVo.class));
+			}
 		}
-		
 		voRetorno.setProdutoServico(lista);
-		voRetorno.setTotal(calculaTotalPedido(voRetorno.getProdutoServico(), voRetorno.getDesconto()));
+		voRetorno.setTotal(calculaTotalPedido(voRetorno.getProdutoServico(), voRetorno.getDesconto(), pedido));
 		return voRetorno;
 	}
 
@@ -166,7 +175,7 @@ public class PedidoService {
 			listaProdutoServico.add(mapper.map(produto, ProdutoServicoVo.class));
 		}
 		vo.setProdutoServico(listaProdutoServico);
-		vo.setTotal(calculaTotalPedido(vo.getProdutoServico(), vo.getDesconto()));
+		vo.setTotal(calculaTotalPedido(vo.getProdutoServico(), vo.getDesconto(), pedidoEntity));
 		return vo;
 	}
 
@@ -183,7 +192,7 @@ public class PedidoService {
 				listaProdutos.add(mapper.map(produto.get(), ProdutoServicoVo.class));
 			}
 			po.setProdutoServico(listaProdutos);
-			po.setTotal(calculaTotalPedido(listaProdutos, po.getDesconto()));
+			po.setTotal(calculaTotalPedido(listaProdutos, po.getDesconto(), pedido));
 			lista.add(po);
 		}
 		
@@ -219,7 +228,7 @@ public class PedidoService {
 				lista.add(mapper.map(produto, ProdutoServicoVo.class));
 			}
 			pedidoVo.get(index).setProdutoServico(lista);
-			pedidoVo.get(index).setTotal(calculaTotalPedido(lista, pedido.getDesconto()));
+			pedidoVo.get(index).setTotal(calculaTotalPedido(lista, pedido.getDesconto(), pedido));
 			index++;
 		}
 		
