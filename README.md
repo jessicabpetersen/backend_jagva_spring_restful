@@ -24,20 +24,16 @@ O modelo VO que deve ser passado via body (json) é:
 ![Screenshot](Diagrama_de_classe.png)  
 
 
-## Enums:
+## Para rodar um projeto maven com spring:
+Se a IDE não tiver o ícone para rodar a aplicação, poderá rodar via terminal:
+```sh
+mvn clean compile spring-boot:run
 
--> Situacao:
-	0 : Fechado
-	1 : Aberto
-	
--> Tipo
-	0 : Produto
-	1 : Serviço 
-	
--> Status
-	0 : Inativo
-	1 : Ativado
-  
+ou simplesmente
+
+mvn spring-boot:run
+```
+
 ### Endpoint para cadastro de produto/serviço
 
 | endpoint | HTTP|Descrição |
