@@ -80,7 +80,7 @@ public class PedidoService {
 	protected void atualizaVo(Pedido pedido, PedidoVO vo) {
 		vo.setDesconto(pedido.getDesconto());
 		vo.setSituacao(pedido.getSituacao());
-		vo.setUuid(pedido.getId());
+		vo.setId(pedido.getId());
 	}
 	
 	protected Double calculaTotalPedido(List<ProdutoServicoVo> list, Double desconto) {
@@ -105,7 +105,7 @@ public class PedidoService {
 
 	@Transactional
 	public PedidoVO update(PedidoVO vo) {
-		Pedido pedido = repository.findById(vo.getUuid()).orElseThrow(() -> new ResourceNotFoundException("No records found for this product ID"));
+		Pedido pedido = repository.findById(vo.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this product ID"));
 		verificaCamposPedidoUpdate(pedido, vo);
 		repository.save(pedido);
 		itensRepository.deleteByIdPedido(pedido);
@@ -218,7 +218,6 @@ public class PedidoService {
 				ProdutoServico produto = produtoRepository.findById(item.getIdProdutoServico().getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this order"));
 				lista.add(mapper.map(produto, ProdutoServicoVo.class));
 			}
-			pedidoVo.get(index).setUuid(pedido.getId());
 			pedidoVo.get(index).setProdutoServico(lista);
 			pedidoVo.get(index).setTotal(calculaTotalPedido(lista, pedido.getDesconto()));
 			index++;
