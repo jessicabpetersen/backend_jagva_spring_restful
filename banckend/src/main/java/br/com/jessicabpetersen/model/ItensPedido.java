@@ -35,7 +35,6 @@ public class ItensPedido  implements Serializable, Persistable<UUID> {
 	
 	@OneToOne
 	@JoinColumn(name = "id_pedido")
-	@NotNull
 	private Pedido idPedido;
 	
 	@ManyToOne(optional = true)

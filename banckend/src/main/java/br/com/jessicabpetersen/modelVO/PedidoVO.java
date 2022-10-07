@@ -50,12 +50,12 @@ public class PedidoVO {
 	}
 
 
-	public UUID getUuid() {
+	public UUID getId() {
 		return id;
 	}
 
 
-	public void setUuid(UUID uuid) {
+	public void setId(UUID uuid) {
 		this.id = uuid;
 	}
 
