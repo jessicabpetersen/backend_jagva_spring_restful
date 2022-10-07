@@ -154,7 +154,7 @@ retorno esperado:
 }
 ```
 
-2)
+2) Get com paginação (mas usando a interface Pageable)
 ```sh
 localhost:8080/v1/produto-servico/pagination?page=0&size=5
 ```
@@ -319,7 +319,7 @@ retorno esperado:
 }
 
 ```
-2)
+2) Get com paginação (mas usando a interface Pageable)
 ```sh
 
 localhost:8080/v1/pedido/pagination?page=0&size=5
