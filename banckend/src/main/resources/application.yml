@@ -1,8 +1,11 @@
+server:
+  port: ${BACKEND_PORT:8080}
+  
 spring:
   datasource:
-    username: postgres
-    password: root
-    url: jdbc:postgresql://localhost:5432/backend
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:root}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/backend}
   jpa:
     hibernate:
       ddl-auto: update
