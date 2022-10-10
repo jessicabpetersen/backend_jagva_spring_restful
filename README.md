@@ -46,7 +46,7 @@ Foi configurado para acessar o banco de dados Postgresl na porta padrão com o n
 |/v1/produto-servico/:id| GET | Busca um produto pelo id, que é passado como Path Variable na url|
 |/v1/produto-servico| GET | Busca todos os produtos do banco|
 |/v1/produto-servico/:id| DELETE | Deleta um produto pelo id, que é passado como Path Variable na url|
-|/v1/produto-servico/search| GET| busca uma lista de produtos de acordo com o nome, é aceito os Request param 'searchTerm', 'page' e 'size' para fazer a paginação|
+|/v1/produto-servico/search| GET| busca uma lista de produtos de acordo com o nome, é aceito os Request param 'searchTerm', 'page' e 'size' para fazer a paginação. O searchTerm deve ser o nome do produto/servico|
 |/v1/produto-servico/pagination| GET | busca todos os produtos do banco de acordo com a paginação passada (objeto Pageable)|
 
 ## Endpoint para cadastro de Pedido (e item-pedido)
@@ -58,7 +58,7 @@ Foi configurado para acessar o banco de dados Postgresl na porta padrão com o n
 | /v1/pedido/:id | GET | Busca um pedido no banco de acordo com o id, que é passado como Path Variable na url|
 |/v1/pedido| GET | Busca todos os pedidos no banco|
 |/v1/pedido/:id| DELETE | Deleta o pedido no banco de dados de acordo com o id, que é passado como Path Variable na url|
-|/v1/pedido/search| GET| busca uma lista de produtos de acordo com o desconto, que é passado como Request Param 'searchTerm', é permitido passar também os Request Param 'page' e 'size' para fazer a paginação|
+|/v1/pedido/search| GET| busca uma lista de produtos de acordo com o desconto, que é passado como Request Param 'searchTerm', é permitido passar também os Request Param 'page' e 'size' para fazer a paginação. O searchTerm deve ser o valor do desconto.|
 |/v1/pedido/pagination| GET | Busca todos os pedidos no banco de acordo com a paginação passada (objecto Pageable)|
 
 ### Exemplo de body do produto:
